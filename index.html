@@ -269,15 +269,9 @@ line-height:1.8;
 
 <canvas id="stars"></canvas>
 
-<!-- reproductor invisible -->
-
-<iframe 
-id="musicPlayer"
-width="0"
-height="0"
-src=""
-allow="autoplay">
-</iframe>
+<audio id="music" loop>
+    <source src="carin1.mp3" type="audio/mpeg">
+</audio>
 
 <div id="start" class="glass">
 <h1>Feliz Día del Amor 💜</h1>
@@ -295,26 +289,6 @@ allow="autoplay">
 </div>
 
 <button id="nextBtn">Siguiente ❤️</button>
-
-<div id="finalMessage" style="display:none;">
-<h1>Lo mejor de mi vida... aún está por vivirse contigo ❤️</h1>
-<p>
-Y si algo tengo claro después de cada recuerdo…
-es que lo mejor de mi vida no ha sido un lugar, ni un momento, ni un viaje…
-ha sido coincidir contigo.
-
-Hoy no solo celebro este día especial…
-celebro que existas, que estés en mi vida y que cada paso nos acerque más.
-
-Lo nuestro no es solo una historia bonita…
-es un comienzo infinito.
-
-Y si el destino nos preguntara qué sigue ahora…
-sin dudarlo respondería:
-
-👉 Toda una vida a tu lado. ❤️
-</p>
-</div>
 
 <div id="cinemaFinal">
 <h1 id="finalTitle"></h1>
@@ -451,9 +425,14 @@ document.body.style.background=
 escribir();
 countdown();
 
-/* música */
-document.getElementById("musicPlayer").src=
-"carin.mp3";
+
+const music = document.getElementById("music");
+
+music.volume = 0.6; // opcional, evita que suene muy fuerte
+
+music.play().catch(()=>{
+console.log("El navegador bloqueó el autoplay");
+});
 
 };
 
