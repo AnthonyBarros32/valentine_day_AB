@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+<title>Para Ti ❤️</title>
+
+<style>
+
+/* fondo negro inicial */
+*{
+box-sizing:border-box;
+}
+body{
+margin:0;
+min-height:100vh; /* mejor que height */
+background:radial-gradient(circle at center, #0a0014, #000);
+display:flex;
+justify-content:center;
+align-items:center;
+overflow-x:hidden; /* SOLO oculta horizontal */
+color:white;
+font-family:'Poppins', sans-serif;
+}
+
+/* estrellas */
+
+#stars{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* efecto vidrio */
+
+.glass{
+backdrop-filter: blur(14px);
+background: rgba(255,255,255,0.08);
+padding:50px;
+border-radius:25px;
+text-align:center;
+max-width:750px;
+animation:fade 2s ease;
+}
+
+@keyframes fade{
+from{opacity:0; transform:translateY(40px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+h1{
+font-family:'Playfair Display', serif;
+font-size:42px;
+}
+
+button{
+margin-top:25px;
+padding:15px 40px;
+border:none;
+border-radius:40px;
+font-size:18px;
+cursor:pointer;
+background:#ff4da6;
+color:white;
+transition:.4s;
+}
+
+button:hover{
+transform:scale(1.1);
+box-shadow:0 0 30px #ff4da6;
+}
+
+#content{
+display:none;
+}
+
+#letter{
+margin-top:18px;
+line-height:1.9;
+font-size:18px;
+}
+
+#countdown{
+margin-top:30px;
+font-size:26px;
+color:#ffd6f6;
+}
+
+.glass{
+backdrop-filter: blur(14px);
+background: rgba(255,255,255,0.08);
+padding:28px;
+border-radius:22px;
+text-align:center;
+width:90%;
+max-width:520px;
+animation:fade 2s ease;
+}
+
+h1{
+font-family:'Playfair Display', serif;
+font-size:28px;
+line-height:1.3;
+}
+
+@media (max-width:480px){
+
+h1{
+font-size:26px;
+}
+
+#letter{
+font-size:17px;
+}
+
+button{
+width:100%;
+padding:16px;
+font-size:17px;
+}
+
+}
+
+
+#memories{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:none;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:20px;
+text-align:center;
+z-index:999;
+}
+
+#memories img{
+width:90%;
+height:90%;
+object-fit:cover;
+position:fixed;
+overflow: hidden;
+}
+
+.imgBox{
+width:75vw;
+height:50vh;
+max-width:340px;
+border-radius:18px;
+overflow:hidden;
+
+display:flex;
+justify-content:center;
+align-items:center;
+background:black; /* evita espacios feos */
+position: relative;
+}
+
+/* imagen */
+.imgBox img{
+width:100%;
+height:100%;
+object-fit:contain;
+background:black;
+}
+
+/* texto sobre la imagen */
+#memoryText{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+
+padding:24px 18px 70px 18px; /* 🔥 espacio para el botón */
+
+background:linear-gradient(
+transparent,
+rgba(0,0,0,.85)
+);
+
+font-size:15.5px;
+line-height:1.7;
+}
+
+#nextBtn{
+position:absolute;
+bottom:25px;
+left:50%;
+transform:translateX(-50%);
+width:85%;
+max-width:320px;
+border-radius:35px;
+}
+
+#cinemaFinal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100dvh;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+
+background:rgba(0,0,0,0.97);
+
+opacity:0;
+pointer-events:none;
+transition:opacity 3s ease;
+
+padding:clamp(20px,6vw,80px);
+box-sizing:border-box;
+}
+
+#cinemaFinal.show{
+opacity:1;
+}
+
+#finalTitle{
+font-size:34px;
+margin-bottom:20px;
+animation:fadeUp 3s ease;
+}
+
+#finalText{
+max-width:600px;
+line-height:1.8;
+font-size:18px;
+animation:fadeUp 4s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+#cinemaFinal h1{
+font-size:clamp(28px,5vw,46px);
+margin-bottom:20px;
+}
+
+#cinemaFinal p{
+font-size:clamp(16px,3.5vw,20px);
+max-width:750px;
+line-height:1.8;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<!-- reproductor invisible -->
+
+<iframe 
+id="musicPlayer"
+width="0"
+height="0"
+src=""
+allow="autoplay">
+</iframe>
+
+<div id="start" class="glass">
+<h1>Feliz Día del Amor 💜</h1>
+<button id="startBtn">Haz clic aquí</button>
+</div>
+
+<div id="content" class="glass">
+<h1>Desde que llegaste… ✨</h1>
+
+<div id="memories">
+
+<div class="imgBox">
+    <img id="memoryImg" src="">
+    <div id="memoryText"></div>
+</div>
+
+<button id="nextBtn">Siguiente ❤️</button>
+
+<div id="finalMessage" style="display:none;">
+<h1>Lo mejor de mi vida... aún está por vivirse contigo ❤️</h1>
+<p>
+Y si algo tengo claro después de cada recuerdo…
+es que lo mejor de mi vida no ha sido un lugar, ni un momento, ni un viaje…
+ha sido coincidir contigo.
+
+Hoy no solo celebro este día especial…
+celebro que existas, que estés en mi vida y que cada paso nos acerque más.
+
+Lo nuestro no es solo una historia bonita…
+es un comienzo infinito.
+
+Y si el destino nos preguntara qué sigue ahora…
+sin dudarlo respondería:
+
+👉 Toda una vida a tu lado. ❤️
+</p>
+</div>
+
+<div id="cinemaFinal">
+<h1 id="finalTitle"></h1>
+<p id="finalText"></p>
+</div>
+
+</div>
+
+
+<div id="letter"></div>
+
+<div id="countdown"></div>
+
+<button id="openMemories">Nuestros recuerdos ✨</button>
+
+</div>
+
+<script>
+
+/* estrellas */
+
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars=[];
+
+let stopStars = false;
+
+for(let i=0;i<150;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*1.2,
+s:Math.random()*0.6
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="white";
+
+stars.forEach(star=>{
+ctx.beginPath();
+ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
+ctx.fill();
+
+if(!stopStars){
+star.y+=star.s;
+}
+
+if(star.y>canvas.height){
+star.y=0;
+}
+});
+
+requestAnimationFrame(draw);
+}
+
+draw();
+
+window.addEventListener("resize",()=>{
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+});
+
+/* carta */
+
+const mensaje=`No fue el destino…
+ni la casualidad.
+
+Fue la vida acomodándolo todo,
+para que nuestros caminos se cruzaran.
+
+Desde entonces,
+mis días tienen más luz.
+
+No importa la distancia,
+porque cuando el cariño es real…
+siempre encuentra la manera de acercarnos.
+
+Hoy solo quiero que recuerdes algo:
+
+Eres una de las cosas más bonitas que me han pasado ❤️
+`;
+
+let i=0;
+
+function escribir(){
+
+if(i<mensaje.length){
+document.getElementById("letter").textContent+=mensaje.charAt(i);
+i++;
+setTimeout(escribir,35);
+}
+
+}
+
+/* contador */
+
+function countdown(){
+
+const target=new Date("Mar 13, 2026 18:00:00").getTime();
+
+setInterval(()=>{
+
+const now=new Date().getTime();
+const diff=target-now;
+
+const days=Math.floor(diff/(1000*60*60*24));
+const hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+const minutes=Math.floor((diff%(1000*60*60))/(1000*60));
+
+document.getElementById("countdown").innerHTML=
+`Faltan ${days} días, ${hours} horas y ${minutes} minutos para abrazarte ❤️`;
+
+},1000);
+}
+
+
+/* inicio */
+
+document.getElementById("startBtn").onclick=function(){
+
+document.getElementById("start").style.display="none";
+document.getElementById("content").style.display="block";
+
+document.body.style.background=
+"linear-gradient(135deg,#0d001a,#1a0033,#330033)";
+
+escribir();
+countdown();
+
+/* música */
+document.getElementById("musicPlayer").src=
+"carin.mp3";
+
+};
+
+
+const memoriesData = [
+
+{
+img:"recuerdo_2.jpg",
+text:"Días antes de regresar a Ecuador tomamos estas fotos para guardar un pedacito de nosotros.Con nuestros gorros y tu beso en mi mejilla entendí algo…no importaba la distancia que venía, ya me estaba llevando una parte de ti conmigo."
+},
+
+{
+img:"recuerdo_4.jpg",
+text:"Esa noche en Ecuador compartimos una fiesta de quince años que se volvió un recuerdo inolvidable. Probaste sabores nuevos, de esos que no suelen mezclarse en tu país, y hasta brindamos con una cerveza nacional. Entre risas, baile y miradas cómplices, entendí lo feliz que soy cuando estamos juntos."
+},
+
+{
+img:"recuerdo_1.jpg",
+text:"Caminamos por el malecón sin prisa, como si quisiéramos alargar el tiempo solo para estar juntos. Con la ciudad iluminándonos y la palabra GUAYAQUIL detrás, sellamos ese instante con un beso. Vestidos de celeste y blanco, parecíamos parte del paisaje… pero lo que realmente hizo especial ese paseo fue tenerte a mi lado."
+},
+
+{
+img:"recuerdo_5.jpg",
+text:"Fue tu primera vez viendo el mar… y no podía dejar de mirarte a ti. Tu sonrisa brillaba más que el reflejo del sol en el agua. Caminamos por la arena, recogimos conchas como pequeños tesoros y nos sentamos frente al infinito solo para disfrutar el momento. Ese día entendí que la felicidad a veces es tan simple como estar juntos, escuchando las olas y sintiendo que el mundo se detenía para nosotros."
+}
+
+];
+
+let memoryIndex = 0;
+
+document.getElementById("openMemories").onclick = function(){
+
+memoryIndex = 0;
+
+document.querySelector(".imgBox").style.display="flex";
+document.getElementById("nextBtn").style.display="block";
+
+document.getElementById("memories").style.display="flex";
+
+showMemory();
+
+};
+
+function showMemory(){
+
+document.getElementById("memoryImg").src =
+memoriesData[memoryIndex].img;
+
+document.getElementById("memoryText").innerText =
+memoriesData[memoryIndex].text;
+
+}
+
+document.getElementById("nextBtn").onclick = function(){
+
+memoryIndex++;
+
+if(memoryIndex >= memoriesData.length){
+
+stopStars = true;
+
+// ocultar collage
+document.querySelector(".imgBox").style.display="none";
+document.getElementById("nextBtn").style.display="none";
+
+// mostrar final
+const cinema = document.getElementById("cinemaFinal");
+
+document.getElementById("finalTitle").innerText =
+"Nuestro viaje apenas comienza...";
+
+document.getElementById("finalText").innerText =
+finalMessage;
+
+cinema.classList.add("show");
+
+return;
+}
+
+showMemory();
+
+};
+
+const finalMessage = 
+`Y si algo tengo claro después de cada recuerdo…
+es que lo mejor de mi vida no ha sido un lugar, ni un momento, ni un viaje…
+ha sido coincidir contigo.
+
+Hoy no solo celebro este día especial…
+celebro que existas, que estés en mi vida y que cada paso nos acerque más.
+
+Lo nuestro no es solo una historia bonita…
+es un comienzo infinito.
+
+Y si el destino nos preguntara qué sigue ahora…
+sin dudarlo respondería:
+
+👉 Toda una vida a tu lado. ❤️`;
+
+</script>
+
+</body>
+</html>
