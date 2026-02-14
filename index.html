@@ -188,6 +188,12 @@ rgba(0,0,0,.85)
 
 font-size:15.5px;
 line-height:1.7;
+
+color:white;
+    text-shadow:
+        1px 1px 3px black,
+        -1px -1px 3px black,
+        0 0 10px black; /* grosor y color del borde */
 }
 
 #nextBtn{
@@ -404,9 +410,10 @@ const diff=target-now;
 const days=Math.floor(diff/(1000*60*60*24));
 const hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
 const minutes=Math.floor((diff%(1000*60*60))/(1000*60));
+const seconds=Math.floor((diff%(1000*60))/1000);
 
 document.getElementById("countdown").innerHTML=
-`Faltan ${days} días, ${hours} horas y ${minutes} minutos para abrazarte ❤️`;
+`Faltan ${days} días, ${hours} horas , ${minutes}  minutos y ${seconds} segundos para nuestro próximo encuentro.`;
 
 },1000);
 }
